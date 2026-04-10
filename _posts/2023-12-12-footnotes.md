@@ -1,8 +1,8 @@
 ---
 title: Using Footnotes
-author: Tao He
+author: jhyung91
 date: 2023-12-12
-category: Jekyll
+category: 글쓰기
 layout: post
 mermaid: true
 ---

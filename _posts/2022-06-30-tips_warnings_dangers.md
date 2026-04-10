@@ -1,8 +1,8 @@
 ---
 title: Tips, Warnings, and Dangers
-author: Tao He
+author: jhyung91
 date: 2022-06-30
-category: Jekyll
+category: 글쓰기
 layout: post
 ---
 

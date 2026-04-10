@@ -1,8 +1,8 @@
 ---
 title: Page with cover image
-author: Tao He
+author: jhyung91
 date: 2022-05-24
-category: Jekyll
+category: 디자인
 layout: post
 cover: https://sighingnow.github.io/jekyll-gitbook/assets/dinosaur.gif
 ---

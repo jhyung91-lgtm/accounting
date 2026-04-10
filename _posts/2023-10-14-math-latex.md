@@ -1,8 +1,8 @@
 ---
 title: MathJax and LaTeX
-author: Tao He
+author: jhyung91
 date: 2023-10-14
-category: Jekyll
+category: 수식
 layout: post
 mermaid: true
 ---

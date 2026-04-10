@@ -1,8 +1,8 @@
 ---
 title: Wide tables
-author: Tao He
+author: jhyung91
 date: 2022-06-26
-category: Jekyll
+category: 디자인
 layout: post
 ---
 
