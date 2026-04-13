@@ -24,7 +24,15 @@ layout: post
 
 <div style="border-radius:10px; overflow:hidden; box-shadow:0 1px 8px rgba(0,0,0,0.07); opacity:0.6;">
   <div style="background:#7a9c82; color:#fff; padding:12px 20px; font-weight:600; font-size:0.95em;">3. 미지급금(통신비,전화비)</div>
-  <div style="background:#f6faf7; padding:12px 20px; font-size:0.9em; color:#888; border:1px solid #d0e4d8; border-top:none; border-radius:0 0 10px 10px;">5월부터 전도금 지급이 되지 않습니다. 5월은 SAP에서 미지급금 전표 작성하고 6월부터는 유니포스트(E-ACCOUNTING)에서 진행 예정입니다. 미지급금 매뉴얼은 5월초 오픈 예정입니다.</div>
+  <div style="background:#f6faf7; padding:12px 20px; font-size:0.9em; color:#555; border:1px solid #d0e4d8; border-top:none; border-radius:0 0 10px 10px;">
+    지점 통신비, 전화비 미지급금 SAP 전표 작성<br><br>
+    <div style="background:#fff3e0; border-left:4px solid #e6940a; border-radius:0 8px 8px 0; padding:10px 14px; font-size:0.9em; color:#7a5a1a;">
+      ⚠️ <strong>5월부터 전도금 지급이 되지 않습니다.</strong><br>
+      · 5월 : SAP에서 미지급금 전표 직접 작성<br>
+      · 6월~ : 유니포스트(E-ACCOUNTING)에서 진행 예정<br>
+      · 미지급금 매뉴얼은 <strong>5월초 오픈 예정</strong>입니다.
+    </div>
+  </div>
 </div>
 
 </div>
