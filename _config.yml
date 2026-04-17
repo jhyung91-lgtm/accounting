@@ -72,3 +72,10 @@ plugins:
   - jekyll-feed
   - jekyll-readme-index
   - jemoji
+
+# Password protection (SHA-256 hash of the password)
+# Default password: accounting2024
+# To change: open browser console and run:
+#   crypto.subtle.digest('SHA-256', new TextEncoder().encode('newpassword'))
+#     .then(b => console.log([...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')))
+site_password_hash: "f446546e3f93010deb99b0120447b2ad78ea6c092f5b10ea42f8a3af52839084"
