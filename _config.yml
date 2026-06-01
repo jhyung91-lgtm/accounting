@@ -8,8 +8,8 @@ description: >
 version:          1.0
 gitbook_version:  3.2.3
 
-url:              'https://accounting.osstem.com'
-baseurl:          ''
+url:             'https://jhyung91-lgtm.github.io'
+baseurl:          '/accounting'
 rss:              RSS
 
 # bootstrap: use the remote theme for the site itself
