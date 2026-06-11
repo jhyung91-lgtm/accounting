@@ -1,0 +1,54 @@
+name: Generate PDF Manual
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '_pages/**'
+  workflow_dispatch:
+
+jobs:
+  generate-pdf:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pandoc and Korean fonts
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y pandoc texlive-xetex texlive-lang-cjk fonts-nanum
+
+      - name: Combine pages and generate PDF
+        run: |
+          python3 - << 'EOF'
+          import re, glob
+          files = sorted(glob.glob('_pages/*.md'))
+          parts = []
+          for f in files:
+              with open(f, encoding='utf-8') as fp:
+                  content = fp.read()
+              content = re.sub(r'^---\s*\n.*?\n---\s*\n', '', content, flags=re.DOTALL)
+              parts.append(content.strip())
+          combined = '\n\n\\newpage\n\n'.join(parts)
+          with open('/tmp/manual.md', 'w', encoding='utf-8') as fp:
+              fp.write(combined)
+          print(f"Combined {len(files)} files")
+          EOF
+          pandoc /tmp/manual.md \
+            -o assets/manual.pdf \
+            --pdf-engine=xelatex \
+            -V mainfont="NanumGothic" \
+            -V geometry:margin=2.5cm \
+            -V fontsize=11pt \
+            --toc --toc-depth=2 \
+            -M title="회계팀 매뉴얼"
+
+      - name: Commit PDF
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/manual.pdf
+          git diff --staged --quiet || git commit -m "chore: update manual PDF [skip ci]"
+          git push
