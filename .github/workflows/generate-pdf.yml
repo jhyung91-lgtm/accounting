@@ -1,49 +1,97 @@
 name: Generate PDF Manual
 
 on:
-  push:
-    branches: [master]
-    paths:
-      - '_pages/**'
+  workflow_run:
+    workflows: ["pages build and deployment"]
+    types: [completed]
   workflow_dispatch:
 
 jobs:
   generate-pdf:
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install pandoc and Korean fonts
-        run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y pandoc texlive-xetex texlive-lang-cjk fonts-nanum
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-      - name: Combine pages and generate PDF
+      - name: Install dependencies
+        run: npm install puppeteer pdf-lib
+
+      - name: Generate PDF from live site
         run: |
-          python3 - << 'EOF'
-          import re, glob
-          files = sorted(glob.glob('_pages/*.md'))
-          parts = []
-          for f in files:
-              with open(f, encoding='utf-8') as fp:
-                  content = fp.read()
-              content = re.sub(r'^---\s*\n.*?\n---\s*\n', '', content, flags=re.DOTALL)
-              parts.append(content.strip())
-          combined = '\n\n\\newpage\n\n'.join(parts)
-          with open('/tmp/manual.md', 'w', encoding='utf-8') as fp:
-              fp.write(combined)
-          print(f"Combined {len(files)} files")
+          node - << 'EOF'
+          const puppeteer = require('puppeteer');
+          const { PDFDocument } = require('pdf-lib');
+          const fs = require('fs');
+
+          const BASE = 'https://jhyung91-lgtm.github.io/accounting';
+
+          async function main() {
+            const files = fs.readdirSync('_pages')
+              .filter(f => f.endsWith('.md'))
+              .sort();
+
+            const urls = files.map(f => {
+              const name = f.replace('.md', '');
+              return `${BASE}/pages/${encodeURIComponent(name)}/`;
+            });
+
+            console.log(`Generating PDF for ${urls.length} pages...`);
+
+            const browser = await puppeteer.launch({
+              args: ['--no-sandbox', '--disable-setuid-sandbox'],
+            });
+
+            const pdfBuffers = [];
+            for (const url of urls) {
+              console.log('→', url);
+              const page = await browser.newPage();
+              await page.setViewport({ width: 1200, height: 800 });
+              await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
+
+              await page.evaluate(() => {
+                document.querySelectorAll(
+                  '.book-summary, .navigation-prev, .navigation-next, .book-header, #pw-overlay'
+                ).forEach(el => el.remove());
+                const body = document.querySelector('.book-body');
+                if (body) body.style.left = '0';
+                const inner = document.querySelector('.page-inner');
+                if (inner) {
+                  inner.style.maxWidth = '100%';
+                  inner.style.padding = '20px 40px';
+                }
+              });
+
+              const pdf = await page.pdf({
+                format: 'A4',
+                printBackground: true,
+                margin: { top: '1cm', bottom: '1cm', left: '1cm', right: '1cm' }
+              });
+
+              pdfBuffers.push(pdf);
+              await page.close();
+            }
+
+            await browser.close();
+
+            const merged = await PDFDocument.create();
+            for (const buf of pdfBuffers) {
+              const doc = await PDFDocument.load(buf);
+              const pages = await merged.copyPages(doc, doc.getPageIndices());
+              pages.forEach(p => merged.addPage(p));
+            }
+
+            fs.writeFileSync('assets/manual.pdf', await merged.save());
+            console.log('Done!');
+          }
+
+          main().catch(e => { console.error(e); process.exit(1); });
           EOF
-          pandoc /tmp/manual.md \
-            -o assets/manual.pdf \
-            --pdf-engine=xelatex \
-            -V mainfont="NanumGothic" \
-            -V geometry:margin=2.5cm \
-            -V fontsize=11pt \
-            --toc --toc-depth=2 \
-            -M title="회계팀 매뉴얼"
 
       - name: Commit PDF
         run: |
