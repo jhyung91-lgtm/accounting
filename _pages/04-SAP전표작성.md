@@ -27,10 +27,10 @@ layout: post
   <div style="background:#f6faf7; padding:12px 20px; font-size:0.9em; color:#555; border:1px solid #d0e4d8; border-top:none; border-radius:0 0 10px 10px;">
     지점 통신비, 전화비 미지급금 SAP 전표 작성<br><br>
     <div style="background:#fff3e0; border-left:4px solid #e6940a; border-radius:0 8px 8px 0; padding:10px 14px; font-size:0.9em; color:#7a5a1a;">
-      ⚠️ <strong>5월부터 전도금 지급이 되지 않습니다.</strong><br>
-      · 5월 : SAP에서 미지급금 전표 직접 작성<br>
-      · 6월~ : 유니포스트(E-ACCOUNTING)에서 진행 예정<br>
-      · 미지급금 매뉴얼은 <strong>5월초 오픈 예정</strong>입니다.
+      ⚠️ <strong>26년 5월부터 전도금 지급이 되지 않습니다.</strong><br>
+      · 26년 5월 : SAP에서 미지급금 전표 직접 작성<br>
+      · GERP오픈시 : 유니포스트(E-ACCOUNTING)에서 진행 예정<br>
+      · 통신비 전화비 미지급금 매뉴얼은 <strong>따로 배포예정</strong>입니다.
     </div>
   </div>
 </div>
